@@ -1,0 +1,11 @@
+﻿1.User Form field validate
+
+2.deviceCategory 查看有问题，是否需要查看功能 deviceCategoryInfo/base 有问题
+
+3.deviceCategory对于用户查看和修改的权限在UI方面有问题
+
+4.group添加页面的字段绑定有问题
+
+5.批量上下线
+
+6.DeviceCategory批量删除

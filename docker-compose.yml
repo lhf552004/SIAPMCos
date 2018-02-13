@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  apppodcloud:
+    image: apppodcloud
+    build:
+      context: ./src/AppPodCloud
+      dockerfile: Dockerfile
