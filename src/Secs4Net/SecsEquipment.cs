@@ -35,8 +35,9 @@ namespace Secs4Net
         private readonly ConcurrentDictionary<int, TaskCompletionSourceToken> _replyExpectedMsgs = new ConcurrentDictionary<int, TaskCompletionSourceToken>();
         private readonly EventHandler<SocketAsyncEventArgs> _sendDataMessageCompleteHandler;
         public event EventHandler<ConnectionState> ConnectionChanged;
-        public event EventHandler<SecsMessage> DataReceived;
-        public event EventHandler Connected;
+        public event EventHandler<SecsDataReceivedEventArgs> DataReceived;
+        public event EventHandler<SecsEquipment> Connected;
+
         public SecsEquipment(SCESEquipment sCESEquipment)
         {
             SCESEquipment = sCESEquipment;
@@ -98,7 +99,7 @@ namespace Secs4Net
 
                     SocketReceiveEventCompleted(SocketClient, receiveCompleteEvent);
                 }
-                Connected(SocketClient,null);
+                Connected(SocketClient,this);
                 connected = true;
             }
             catch(Exception ex)
@@ -215,7 +216,8 @@ namespace Secs4Net
                         int index = 0;
                         Item item = decoder.BufferedDecodeItem(bytes, ref index);
                         Msg = new SecsMessage(MsgHeader.S, MsgHeader.F, MsgHeader.ReplyExpected, "", item);
-                        DataReceived(SocketClient,Msg);
+                        SecsDataReceivedEventArgs arg = new SecsDataReceivedEventArgs(Msg, SCESEquipment);
+                        DataReceived(SocketClient, arg);
                     }
                 }
             }

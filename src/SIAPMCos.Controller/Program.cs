@@ -81,7 +81,12 @@ namespace SIAPM.ProduceController
 
 
             ModuleLineController controller = new ModuleLineController();
-            controller.testAsync().Wait(); 
+            do
+            {
+                controller.connectToEquip();
+            } while (true);
+
+            //controller.testAsync().Wait(); 
         }
        
         public IServiceProvider Container { get; private set; }

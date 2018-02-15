@@ -44,10 +44,41 @@ namespace SIAPM.ProduceController
             //    _plantSvc = scope.Resolve<IPlantService>();
             //    _unitOfwork = scope.Resolve<IUnitOfWorkAsync>();
             //}
+           
         }
         public void connectToEquip()
         {
+            var secsEquip = new List<SecsEquipment>();
+            foreach(var equip in getSECSEquipment())
+            {
+                if(!string.IsNullOrEmpty(equip.Address) || equip.Port <= 0)
+                {
+                    continue;
+                }
+                var sq1 = new SecsEquipment(equip.Address, equip.Port);
+                sq1.Connected += ConnectedHandler;
+                sq1.Connect();
+                sq1.DataReceived += DataReceivedHandler;
+            }
+        }
+        private void ConnectedHandler(object sender, SecsEquipment equip)
+        {
+            var dbEquip = equip.SCESEquipment;
+            dbEquip.Status = LineStatus.Connected;
+            _sCESEquipmentService.Update(dbEquip);
+            _sCESEquipmentService.SaveChangesAsync();
+        }
+        private void DataReceivedHandler(object sender, SecsDataReceivedEventArgs arg)
+        {
+          
+            //event
+            if (arg.SecsMessage.S == 6 && arg.SecsMessage.F == 11)
+            {
+                if(arg.SCESEquipment.SECSType == SECSType.ZBV)
+                {
 
+                }
+            }
         }
         public async Task testAsync()
         {
@@ -458,8 +489,9 @@ namespace SIAPM.ProduceController
         }
         public List<SCESEquipment> getSECSEquipment()
         {
-            //_sCESEquipmentService.
-            return null;
+            var equips = _sCESEquipmentService.Query(e => e.Deleted == false).ToList();
+
+            return equips;
         }
 
     }

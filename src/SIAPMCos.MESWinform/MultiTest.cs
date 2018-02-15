@@ -519,37 +519,37 @@ namespace SIAPM.MESWinform
 
         }
 
-        private void DataReceivedHandler(object sender, SecsMessage msg)
+        private void DataReceivedHandler(object sender, SecsDataReceivedEventArgs arg)
         {
-            StreamTextBox.Text = msg.S.ToString();
-            FunctionTextBox.Text = msg.F.ToString();
+            StreamTextBox.Text = arg.SecsMessage.S.ToString();
+            FunctionTextBox.Text = arg.SecsMessage.F.ToString();
             StatusTextBox.AppendText("get msg header for device 0.\n");
-            MessageTextBox.Text = msg.ToString();
+            MessageTextBox.Text = arg.SecsMessage.ToString();
             MessageTextBox.AppendText("\n");
-            MessageTextBox.AppendText(msg.SecsItem.ToString());
+            MessageTextBox.AppendText(arg.SecsMessage.SecsItem.ToString());
             StatusTextBox.AppendText("get msg data for device 0.\n");
-            if(msg.S == 6 && msg.F == 11)
+            if(arg.SecsMessage.S == 6 && arg.SecsMessage.F == 11)
             {
 
             }
         }
-        private void Data2ReceivedHandler(object sender, SecsMessage msg)
+        private void Data2ReceivedHandler(object sender, SecsDataReceivedEventArgs arg)
         {
-            Stream2TextBox.Text = msg.S.ToString();
-            Function2TextBox.Text = msg.F.ToString();
+            Stream2TextBox.Text = arg.SecsMessage.S.ToString();
+            Function2TextBox.Text = arg.SecsMessage.F.ToString();
             StatusTextBox.AppendText("get msg header for device 0.\n");
-            Message2TextBox.Text = msg.ToString();
+            Message2TextBox.Text = arg.SecsMessage.ToString();
             Message2TextBox.AppendText("\n");
-            Message2TextBox.AppendText(msg.SecsItem.ToString());
+            Message2TextBox.AppendText(arg.SecsMessage.SecsItem.ToString());
             StatusTextBox.AppendText("get msg data for device 0.\n");
         }
 
-        private void ConnectedHandler(object sender, EventArgs e)
+        private void ConnectedHandler(object sender, SecsEquipment equip)
         {
             StatusTextBox.AppendText("device 0 connected.\n");
         }
 
-        private void Connected2Handler(object sender, EventArgs e)
+        private void Connected2Handler(object sender, SecsEquipment equip)
         {
             StatusTextBox.AppendText("device 1 connected.\n");
         }
